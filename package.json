@@ -3,12 +3,17 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "bun --bun astro dev",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.1.6"
+    "@unpic/astro": "^0.1.0",
+    "astro": "^5.1.6",
+    "astro-masonry": "^1.0.2"
+  },
+  "devDependencies": {
+    "sass-embedded": "^1.83.4"
   }
 }
