@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@unpic/astro": "^0.1.0",
-    "astro": "^5.1.6",
-    "astro-masonry": "^1.0.2"
+    "astro": "^5.1.7",
+    "astro-masonry": "^1.0.3"
   },
   "devDependencies": {
     "sass-embedded": "^1.83.4"
