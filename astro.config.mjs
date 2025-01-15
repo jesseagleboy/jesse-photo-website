@@ -5,7 +5,7 @@ import { imageService } from "@unpic/astro/service";
 // https://astro.build/config
 export default defineConfig( {
     image: {
-        experimentalLayout: 'responsive',
+        // experimentalLayout: 'responsive',
         service: imageService(),
     },
 	experimental: {
