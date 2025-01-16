@@ -9,13 +9,13 @@ import tailwind from "@astrojs/tailwind";
 import partytown from "@astrojs/partytown";
 
 // https://astro.build/config
-export default defineConfig( {
-  site: 'https://jesse-photo-website.netlify.app/',
+export default defineConfig({
+	site: "https://jesse-photo-website.netlify.app/",
 	image: {
-		// experimentalLayout: 'responsive',
-    service: imageService( {
-      placeholder: 'blurhash',
-    }),
+		experimentalLayout: "responsive",
+		service: imageService({
+			placeholder: "blurhash",
+		}),
 	},
 
 	experimental: {
