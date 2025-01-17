@@ -3,10 +3,10 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "bun --bun astro dev",
-    "build": "bun --bun astro build",
-    "preview": "bun --bun astro preview",
-    "astro": "bun --bun astro"
+    "dev": "bunx --bun astro dev",
+    "build": "bunx --bun astro build",
+    "preview": "bunx --bun astro preview",
+    "astro": "bunx --bun astro"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.3",
