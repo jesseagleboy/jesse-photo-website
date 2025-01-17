@@ -13,9 +13,9 @@ export default defineConfig({
 	site: "https://jesse-photo-website.netlify.app/",
 	image: {
 		experimentalLayout: "responsive",
-		service: imageService({
-			placeholder: "blurhash",
-		}),
+		// service: imageService({
+		// 	placeholder: "blurhash",
+		// }),
 	},
 
 	experimental: {

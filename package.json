@@ -5,8 +5,8 @@
   "scripts": {
     "dev": "bun --bun astro dev",
     "build": "bun --bun astro build",
-    "preview": "bunx --bun astro preview",
-    "astro": "bunx --bun astro"
+    "preview": "bun --bun astro preview",
+    "astro": "bun --bun astro"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.3",
