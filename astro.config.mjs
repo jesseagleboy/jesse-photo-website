@@ -9,21 +9,29 @@ import partytown from "@astrojs/partytown";
 
 import svelte from "@astrojs/svelte";
 
+import robots from "astro-robots";
+
 // https://astro.build/config
 export default defineConfig({
-    site: "https://jesse-photo-website.netlify.app/",
-    image: {
-        experimentalLayout: "responsive",
-    },
+	site: "https://jesse-photo-website.netlify.app/",
+	image: {
+		experimentalLayout: "responsive",
+	},
 
-    experimental: {
-        responsiveImages: true,
-        svg: true,
-    },
+	experimental: {
+		responsiveImages: true,
+		svg: true,
+	},
 
-    integrations: [sitemap(), tailwind(), partytown({
-        config: {
-            forward: ["dataLayer.push"],
-        },
-		}), svelte()],
+	integrations: [
+		sitemap(),
+		tailwind(),
+		partytown({
+			config: {
+				forward: ["dataLayer.push"],
+			},
+		}),
+		svelte(),
+		robots(),
+	],
 });
