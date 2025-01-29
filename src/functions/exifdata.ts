@@ -7,7 +7,15 @@ export interface DataTypes {
 	googleMapsSrc: string;
 	date: string;
 }
-export async function setupExifData([path, image]) {
+
+interface GPSStringReturnType {
+	gpsToString: string;
+	gpsData: {
+		latitude: string;
+		longitude: string;
+	};
+}
+export async function setupExifData([path, image]: [string, { default: ImageMetadata }]): Promise<DataTypes> {
 	const newPath = path.slice(1);
 	const metadata = await ExifReader.load(newPath);
 	const gpsData = metadata;
@@ -24,8 +32,7 @@ export async function setupExifData([path, image]) {
 	};
 }
 
-export function convertGPSToString(gpsData: ExifReader.Tags) {
-	function convertToDMS(coordinates) {
+function convertToDMS(coordinates) {
 		const degrees = coordinates.value[0][0];
 		const minutes = coordinates.value[1][0];
 		const seconds = (coordinates.value[2][0] / coordinates.value[2][1]).toFixed(
@@ -33,6 +40,9 @@ export function convertGPSToString(gpsData: ExifReader.Tags) {
 		);
 		return `${degrees}°${minutes}'${seconds}"`;
 	}
+
+ function convertGPSToString(gpsData: ExifReader.Tags): GPSStringReturnType {
+	
 
 	const lat = convertToDMS(gpsData.GPSLatitude);
 	const lng = convertToDMS(gpsData.GPSLongitude);
@@ -48,7 +58,7 @@ export function convertGPSToString(gpsData: ExifReader.Tags) {
 	};
 }
 
-export function getDate(metadata: ExifReader.Tags) {
+function getDate(metadata: ExifReader.Tags) {
 	const TimeInfo = [
 		metadata.DateTimeOriginal?.description,
 		metadata.OffsetTimeOriginal?.description,

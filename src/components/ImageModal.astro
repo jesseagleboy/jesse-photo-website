@@ -1,11 +1,16 @@
 ---
 import { Image } from "astro:assets";
 
+export interface Props {
+    imageUrl: ImageMetadata;
+    mapSrc: string;
+    date: string;
+    index: number;
+}
+
 const { imageUrl, mapSrc, date, index } = Astro.props;
 
-// const imageUrl = "/path/to/photo.jpg"; // Replace with actual image URL
-// const mapSrc = "https://www.google.com/maps/embed?pb=YOUR_MAP_EMBED_URL"; // Replace with actual embed URL
-// const date = "January 29, 2025"; // Replace with actual date
+console.log(mapSrc)
 ---
 
 <dialog id='photoModal' class='modal'>
