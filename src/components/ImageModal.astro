@@ -3,12 +3,12 @@ import { Image } from "astro:assets";
 
 export interface Props {
     imageUrl: ImageMetadata;
-    mapSrc: string;
+    // mapSrc: string;
     date: string;
     index: number;
 }
 
-const { imageUrl, mapSrc, date, index } = Astro.props;
+const { imageUrl, date, index } = Astro.props;
 ---
 
 <dialog id='photoModal' class='modal'>
@@ -24,7 +24,7 @@ const { imageUrl, mapSrc, date, index } = Astro.props;
 			</div>
 
 			<!-- Date Section -->
-			<div class='badge text-center text-gray-600 font-medium'>{date}</div>
+			<div class='badge text-center font-medium'>{date}</div>
 		</div>
 
 		<div class='modal-action'>
