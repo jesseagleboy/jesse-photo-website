@@ -1,0 +1,46 @@
+---
+import { Image } from "astro:assets";
+
+const { imageUrl, mapSrc, date, index } = Astro.props;
+
+// const imageUrl = "/path/to/photo.jpg"; // Replace with actual image URL
+// const mapSrc = "https://www.google.com/maps/embed?pb=YOUR_MAP_EMBED_URL"; // Replace with actual embed URL
+// const date = "January 29, 2025"; // Replace with actual date
+---
+
+<dialog id='photoModal' class='modal'>
+	<div class='modal-box max-w-4xl w-full p-4'>
+		<div id='modal-body' class='flex flex-col md:grid md:grid-cols-1 md:grid-rows-[calc(100dvh-15em)] gap-2'>
+			<div id={`image-with-map-${index}`} class='gap-4'>
+				<!-- Image Section -->
+				<div>
+					<Image src={imageUrl} alt='Photo' class='object-contain rounded-lg' data-getIndex={index} onload='adjustLayout(this)' style="height: 100%" />
+				</div>
+				<!-- Google Maps Embed -->
+				<iframe src={mapSrc} class='w-full rounded-lg border' allowfullscreen loading='lazy'></iframe>
+			</div>
+
+			<!-- Date Section -->
+			<div class='badge text-center text-gray-600 font-medium'>{date}</div>
+		</div>
+
+		<div class='modal-action'>
+			<button id='close-dialog-button' onclick="this.closest('dialog').close()" class='btn'>Close</button>
+		</div>
+	</div>
+</dialog>
+
+<script is:inline>
+	function adjustLayout(img) {
+		const index = img.dataset.getindex;
+		const container = document.getElementById(`image-with-map-${index}`);
+		const isPortrait = img.naturalHeight > img.naturalWidth;
+		if (isPortrait) {
+			container.classList.add("flex", "flex-row");
+			container.classList.remove("grid", "grid-cols-1");
+		} else {
+			container.classList.add("grid", "grid-cols-1");
+			container.classList.remove("flex", "flex-row");
+		}
+	}
+</script>

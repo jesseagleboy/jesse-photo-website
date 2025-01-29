@@ -14,6 +14,9 @@ import robots from "astro-robots";
 // https://astro.build/config
 export default defineConfig({
 	site: "https://jesse-photo-website.netlify.app/",
+	server: {
+		open: true,
+	},
 	image: {
 		experimentalLayout: "responsive",
 	},
