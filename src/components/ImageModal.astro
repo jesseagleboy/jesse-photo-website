@@ -10,14 +10,14 @@ const { imageUrl, mapSrc, date, index } = Astro.props;
 
 <dialog id='photoModal' class='modal'>
 	<div class='modal-box max-w-4xl w-full p-4'>
-		<div id='modal-body' class='flex flex-col md:grid md:grid-cols-1 md:grid-rows-[calc(100dvh-15em)] gap-2'>
+		<div id='modal-body' class='flex flex-col md:grid md:grid-cols-1 md:grid-rows-[calc(100dvh-13em)] gap-2'>
 			<div id={`image-with-map-${index}`} class='gap-4'>
 				<!-- Image Section -->
 				<div>
 					<Image src={imageUrl} alt='Photo' class='object-contain rounded-lg' data-getIndex={index} onload='adjustLayout(this)' style="height: 100%" />
 				</div>
 				<!-- Google Maps Embed -->
-				<iframe src={mapSrc} class='w-full rounded-lg border' allowfullscreen loading='lazy'></iframe>
+				<iframe src={mapSrc} class='w-full rounded-lg border' allowfullscreen loading='lazy' style="height:100%"></iframe>
 			</div>
 
 			<!-- Date Section -->
