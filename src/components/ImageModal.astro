@@ -20,7 +20,7 @@ const { imageUrl, mapSrc, date, index } = Astro.props;
 					<Image src={imageUrl} alt='Photo' class='object-contain rounded-lg' data-getIndex={index} onload='adjustLayout(this)' style="height: 100%" />
 				</div>
 				<!-- Google Maps Embed -->
-				<iframe src={mapSrc} class='w-full rounded-lg border' allowfullscreen loading='lazy' style="height:100%"></iframe>
+				<iframe class='w-full rounded-lg border' allowfullscreen loading='lazy' style="height:100%"></iframe>
 			</div>
 
 			<!-- Date Section -->
