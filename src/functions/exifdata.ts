@@ -1,4 +1,4 @@
-import ExifReader from "exifreader";
+import ExifReader, { type TypedTag, type XmpTag } from "exifreader";
 import { DateTime } from "luxon";
 
 export interface DataTypes {
@@ -15,7 +15,10 @@ interface GPSStringReturnType {
 		longitude: string;
 	};
 }
-export async function setupExifData([path, image]: [string, { default: ImageMetadata }]): Promise<DataTypes> {
+export async function setupExifData([path, image]: [
+	string,
+	{ default: ImageMetadata },
+]): Promise<DataTypes> {
 	const newPath = path.slice(1);
 	const metadata = await ExifReader.load(newPath);
 	const gpsData = metadata;
@@ -32,18 +35,17 @@ export async function setupExifData([path, image]: [string, { default: ImageMeta
 	};
 }
 
-function convertToDMS(coordinates) {
-		const degrees = coordinates.value[0][0];
-		const minutes = coordinates.value[1][0];
-		const seconds = (coordinates.value[2][0] / coordinates.value[2][1]).toFixed(
-			1,
-		);
-		return `${degrees}°${minutes}'${seconds}"`;
-	}
+type GPSShape = Exclude<ExifReader.Tags["GPSLatitude"] | ExifReader.Tags["GPSLongitude"], XmpTag | undefined>;
+function convertToDMS(coordinates: GPSShape) {
+	const degrees = coordinates.value[0][0];
+	const minutes = coordinates.value[1][0];
+	const seconds = (coordinates.value[2][0] / coordinates.value[2][1]).toFixed(
+		1,
+	);
+	return `${degrees}°${minutes}'${seconds}"`;
+}
 
- function convertGPSToString(gpsData: ExifReader.Tags): GPSStringReturnType {
-	
-
+function convertGPSToString(gpsData: ExifReader.Tags): GPSStringReturnType {
 	const lat = convertToDMS(gpsData.GPSLatitude);
 	const lng = convertToDMS(gpsData.GPSLongitude);
 	const latDir = gpsData.GPSLatitudeRef.value[0];
