@@ -43,11 +43,10 @@ function convertToDMS(coordinates: GPSShape): string {
 	if (Object.hasOwn(coordinates.value[0], "attributes")) {
 		return "";
 	}
-	const degrees = coordinates.value[0][0];
-	const minutes = coordinates.value[1][0];
-	const seconds = (coordinates.value[2][0] / coordinates.value[2][1]).toFixed(
-		1,
-	);
+	const value = coordinates.value as [number, number][];
+	const degrees = value[0][0];
+	const minutes = value[1][0];
+	const seconds = (value[2][0] / value[2][1]).toFixed(1);
 	return `${degrees}°${minutes}'${seconds}"`;
 }
 
