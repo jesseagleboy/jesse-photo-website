@@ -35,8 +35,14 @@ export async function setupExifData([path, image]: [
 	};
 }
 
-type GPSShape = Exclude<ExifReader.Tags["GPSLatitude"] | ExifReader.Tags["GPSLongitude"], XmpTag | undefined>;
-function convertToDMS(coordinates: GPSShape) {
+type GPSShape = ExifReader.Tags["GPSLatitude"] | ExifReader.Tags["GPSLongitude"];
+function convertToDMS(coordinates: GPSShape): string {
+	if (!coordinates || !Array.isArray(coordinates.value)) {
+		return "";
+	}
+	if (Object.hasOwn(coordinates.value[0], "attributes")) {
+		return "";
+	}
 	const degrees = coordinates.value[0][0];
 	const minutes = coordinates.value[1][0];
 	const seconds = (coordinates.value[2][0] / coordinates.value[2][1]).toFixed(
@@ -48,14 +54,14 @@ function convertToDMS(coordinates: GPSShape) {
 function convertGPSToString(gpsData: ExifReader.Tags): GPSStringReturnType {
 	const lat = convertToDMS(gpsData.GPSLatitude);
 	const lng = convertToDMS(gpsData.GPSLongitude);
-	const latDir = gpsData.GPSLatitudeRef.value[0];
-	const lngDir = gpsData.GPSLongitudeRef.value[0];
+	const latDir = gpsData.GPSLatitudeRef && Array.isArray(gpsData.GPSLatitudeRef.value) ? gpsData.GPSLatitudeRef.value[0] : '';
+	const lngDir = gpsData.GPSLongitudeRef && Array.isArray(gpsData.GPSLongitudeRef.value) ? gpsData.GPSLongitudeRef.value[0] : '';
 
 	return {
 		gpsToString: `${lat}${latDir} ${lng}${lngDir}`,
 		gpsData: {
-			latitude: gpsData.GPSLatitude.description,
-			longitude: gpsData.GPSLongitude.description,
+			latitude: gpsData.GPSLatitude?.description || "",
+			longitude: gpsData.GPSLongitude?.description || "",
 		},
 	};
 }
