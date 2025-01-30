@@ -3,38 +3,43 @@ import { defineConfig } from "astro/config";
 
 import sitemap from "@astrojs/sitemap";
 
-import tailwind from "@astrojs/tailwind";
-
 import partytown from "@astrojs/partytown";
 
 import svelte from "@astrojs/svelte";
 
 import robots from "astro-robots";
 
+import tailwindcss from "@tailwindcss/vite";
+
 // https://astro.build/config
 export default defineConfig({
-	site: "https://photography.jesseslomowitz.com/",
-	server: {
-		open: true,
-	},
-	image: {
-		experimentalLayout: "responsive",
+  site: "https://photography.jesseslomowitz.com/",
+
+  server: {
+      open: true,
 	},
 
-	experimental: {
-		responsiveImages: true,
-		svg: true,
+  image: {
+      experimentalLayout: "responsive",
 	},
 
-	integrations: [
-		sitemap(),
-		tailwind(),
-		partytown({
-			config: {
-				forward: ["dataLayer.push"],
-			},
-		}),
-		svelte(),
-		robots(),
+  experimental: {
+      responsiveImages: true,
+      svg: true,
+	},
+
+  integrations: [
+      sitemap(),
+      partytown({
+          config: {
+              forward: ["dataLayer.push"],
+          },
+      }),
+      svelte(),
+      robots(),
 	],
+
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });

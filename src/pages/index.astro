@@ -6,15 +6,9 @@ import { Masonry } from "astro-masonry";
 import ImageModal from "../components/ImageModal.astro";
 import { setupExifData, type DataTypes } from "@/functions/exifdata";
 
-const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>(
-	"/src/assets/fireworks-images/*.jpeg",
-	{ eager: true },
-);
+const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>("/src/assets/fireworks-images/*.jpeg", { eager: true });
 
-
-
-const mapping =
-	Object.entries(listOfFireworks).map<Promise<DataTypes>>(setupExifData);
+const mapping = Object.entries(listOfFireworks).map<Promise<DataTypes>>(setupExifData);
 
 const listing = await Promise.all(mapping);
 ---
@@ -31,43 +25,21 @@ const listing = await Promise.all(mapping);
 			500: 1,
 		}}>
 		{
-			listing.map(async ({ image_data, googleMapsSrc, date }, index) => {
+			listing.map(async ({ image_data, googleMapsSrc, date, imageElementInput }, index) => {
 				return (
 					<div id='image-container'>
-						<button id='show-dialog-button' class='btn btn-xs' data-GPSSrc={googleMapsSrc}>
+						<button id='show-dialog-button' class='btn btn-xs' data-GPSSrc={googleMapsSrc} data-date={date} data-index={index}>
 							See Image
 						</button>
 						<div id='index' class='badge'>
 							{index + 1}
 						</div>
-						<Image src={image_data} alt='Fireworks' id='mason-image' />
-						{/* <dialog class='modal'>
-							<div class='modal-box max-w-full'>
-								<div id='dialog-content' class='bg-base-100 shadow-sm h-full'>
-									<div class="flex">
-										<figure>
-											<Image src={image_data} alt='Fireworks' id='dialog-image' style="width: 32px; height: 32px; object-fit:contain"/>
-										</figure>
-										<iframe />
-									</div>
-									<div class='card-body'>
-										<div class='card-actions justify-end'>
-											<div id='time-area' class='badge badge-outline'>
-												Date: {date}
-											</div>
-										</div>
-									</div>
-									<button id='close-dialog-button' class='btn btn-md'>
-										X
-									</button>
-								</div>
-							</div>
-						</dialog> */}
-						<ImageModal imageUrl={image_data} date={date} index={index} />
+						<Image src={image_data} alt='Fireworks' id='mason-image' id={`mason-image-${index}`} />
 					</div>
 				);
 			})
 		}
+		<ImageModal />
 	</Masonry>
 </Layout>
 
@@ -127,17 +99,12 @@ const listing = await Promise.all(mapping);
 </style>
 
 <script>
-	const dialog = document.querySelectorAll<HTMLDialogElement>("dialog");
-	const showDialogButton = document.querySelectorAll<HTMLButtonElement>("#show-dialog-button");
+	import constructModalImage from "@/functions/constructModalImage";
 
-	showDialogButton.forEach((button, index) => {
-		button.addEventListener("click", () => {
-			dialog[index].showModal();
-			const src = button.getAttribute("data-GPSSrc");
-			const iframe = dialog[index].querySelector("iframe");
-			if (iframe) {
-				iframe.src = src || "";
-			}
-		});
-	});
+	const dialog = document.querySelector<HTMLDialogElement>("dialog");
+	const showDialogButton = document.querySelectorAll<HTMLButtonElement>("#show-dialog-button");
+	const iframe = dialog?.querySelector("iframe");
+	const date = dialog?.querySelector<HTMLDivElement>("#date");
+
+	showDialogButton.forEach(button => constructModalImage(dialog, iframe, date, button));
 </script>

@@ -1,3 +1,4 @@
+import { getImage } from "astro:assets";
 import ExifReader, { type TypedTag, type XmpTag } from "exifreader";
 import { DateTime } from "luxon";
 
@@ -6,6 +7,7 @@ export interface DataTypes {
 	image_data: ImageMetadata;
 	googleMapsSrc: string;
 	date: string;
+	imageElementInput: Awaited<ReturnType<typeof getImage>>;
 }
 
 interface GPSStringReturnType {
@@ -19,6 +21,7 @@ export async function setupExifData([path, image]: [
 	string,
 	{ default: ImageMetadata },
 ]): Promise<DataTypes> {
+	const astroImageData = await getImage({ src: image.default });
 	const newPath = path.slice(1);
 	const metadata = await ExifReader.load(newPath);
 	const gpsData = metadata;
@@ -32,10 +35,13 @@ export async function setupExifData([path, image]: [
 		image_data: image.default,
 		googleMapsSrc: src,
 		date: photoDate.formattedDate,
+		imageElementInput: astroImageData,
 	};
 }
 
-type GPSShape = ExifReader.Tags["GPSLatitude"] | ExifReader.Tags["GPSLongitude"];
+type GPSShape =
+	| ExifReader.Tags["GPSLatitude"]
+	| ExifReader.Tags["GPSLongitude"];
 function convertToDMS(coordinates: GPSShape): string {
 	if (!coordinates || !Array.isArray(coordinates.value)) {
 		return "";
@@ -53,8 +59,14 @@ function convertToDMS(coordinates: GPSShape): string {
 function convertGPSToString(gpsData: ExifReader.Tags): GPSStringReturnType {
 	const lat = convertToDMS(gpsData.GPSLatitude);
 	const lng = convertToDMS(gpsData.GPSLongitude);
-	const latDir = gpsData.GPSLatitudeRef && Array.isArray(gpsData.GPSLatitudeRef.value) ? gpsData.GPSLatitudeRef.value[0] : '';
-	const lngDir = gpsData.GPSLongitudeRef && Array.isArray(gpsData.GPSLongitudeRef.value) ? gpsData.GPSLongitudeRef.value[0] : '';
+	const latDir =
+		gpsData.GPSLatitudeRef && Array.isArray(gpsData.GPSLatitudeRef.value)
+			? gpsData.GPSLatitudeRef.value[0]
+			: "";
+	const lngDir =
+		gpsData.GPSLongitudeRef && Array.isArray(gpsData.GPSLongitudeRef.value)
+			? gpsData.GPSLongitudeRef.value[0]
+			: "";
 
 	return {
 		gpsToString: `${lat}${latDir} ${lng}${lngDir}`,

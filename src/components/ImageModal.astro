@@ -1,30 +1,17 @@
----
-import { Image } from "astro:assets";
-
-export interface Props {
-    imageUrl: ImageMetadata;
-    // mapSrc: string;
-    date: string;
-    index: number;
-}
-
-const { imageUrl, date, index } = Astro.props;
----
-
 <dialog id='photoModal' class='modal'>
 	<div class='modal-box max-w-4xl w-full p-4'>
 		<div id='modal-body' class='flex flex-col md:grid md:grid-cols-1 md:grid-rows-[calc(100dvh-13em)] gap-2'>
-			<div id={`image-with-map-${index}`} class='gap-4'>
+			<div id='image-with-map' class='gap-4'>
 				<!-- Image Section -->
 				<div>
-					<Image src={imageUrl} alt='Photo' class='object-contain rounded-lg' data-getIndex={index} onload='adjustLayout(this)' style="height: 100%" />
+					<img id='modal-image' />
 				</div>
 				<!-- Google Maps Embed -->
-				<iframe class='w-full rounded-lg border' allowfullscreen loading='lazy' style="height:100%"></iframe>
+				<iframe class='w-full rounded-lg border' allowfullscreen loading='lazy' style='height:100%'></iframe>
 			</div>
 
 			<!-- Date Section -->
-			<div class='badge text-center font-medium'>{date}</div>
+			<div id='date' class='badge text-center font-medium'></div>
 		</div>
 
 		<div class='modal-action'>
@@ -32,18 +19,3 @@ const { imageUrl, date, index } = Astro.props;
 		</div>
 	</div>
 </dialog>
-
-<script is:inline>
-	function adjustLayout(img) {
-		const index = img.dataset.getindex;
-		const container = document.getElementById(`image-with-map-${index}`);
-		const isPortrait = img.naturalHeight > img.naturalWidth;
-		if (isPortrait) {
-			container.classList.add("flex", "flex-row");
-			container.classList.remove("grid", "grid-cols-1");
-		} else {
-			container.classList.add("grid", "grid-cols-1");
-			container.classList.remove("flex", "flex-row");
-		}
-	}
-</script>
