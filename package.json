@@ -1,7 +1,7 @@
 {
   "name": "jesse-photo-website",
   "type": "module",
-  "version": "1.0.2",
+  "version": "1.5.0",
   "scripts": {
     "dev": "bunx --bun astro dev",
     "build": "bunx --bun astro build",
