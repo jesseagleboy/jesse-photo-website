@@ -31,6 +31,8 @@ export default function constructModalImage(
 
 			newNode.id = "modal-image";
 			newNode.classList.add("object-contain", "rounded-lg");
+			// Since there is a cloning of all the attributes, we need to remove the hover effect
+			newNode.classList.remove("hover:scale-110", "transition", "duration-500");
 
 			newNode.addEventListener("load", (e) => adjustLayout(e, index));
 
