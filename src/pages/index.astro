@@ -15,13 +15,12 @@ const listing = await Promise.all(mapping);
 
 <Layout>
 	<h3 class='text-4xl font-bold text-center p-4'>Disney Fireworks by Jesse Slomowitz</h3>
-
 	<Masonry
 		sortByHeight={true}
 		class='custom-masonry'
 		columnClass='custom-column-class'
 		breakpointCols={{
-			default: 5,
+			default: 4,
 			1100: 3,
 			700: 2,
 			500: 1,
@@ -36,7 +35,7 @@ const listing = await Promise.all(mapping);
 						<div id='index' class='absolute top-10 left-10 z-10 badge bg-gray-800 text-white opacity-50'>
 							{index + 1}
 						</div>
-						<Image src={image_data} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' onload="this.parentNode.classList.add('loaded');" />
+						<Image src={image_data} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />
 					</div>
 				);
 			})
