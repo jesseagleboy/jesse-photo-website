@@ -4,13 +4,17 @@ import Layout from "../layouts/Layout.astro";
 import type { ImageMetadata } from "astro";
 import { Masonry } from "astro-masonry";
 import ImageModal from "../components/ImageModal.astro";
-import { setupExifData, type DataTypes } from "@/functions/exifdata";
+import { getCollection } from "astro:content";
+import { CldImage } from "astro-cloudinary";
+import { CldVideoPlayer } from "astro-cloudinary";
 
-const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>("/src/assets/fireworks-images/*.jpeg", { eager: true });
+// const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>("/src/assets/Disney-Fireworks/*.{JPG,jpeg,MOV}", { eager: true });
 
-const mapping = Object.entries(listOfFireworks).map<Promise<DataTypes>>(setupExifData);
+// const mapping = Object.entries(listOfFireworks).map<Promise<DataTypes>>(setupExifData);
 
-const listing = await Promise.all(mapping);
+// const listing = await Promise.all(mapping);
+
+const listOfFireworks = await getCollection("Disney Fireworks");
 ---
 
 <Layout>
@@ -26,16 +30,24 @@ const listing = await Promise.all(mapping);
 			500: 1,
 		}}>
 		{
-			listing.map(async ({ image_data, googleMapsSrc, date }, index) => {
-				return (
-					<div id='image-container' class='relative overflow-hidden rounded-lg border border-gray-300'>
-						<button id='show-dialog-button' class='absolute top-10 right-10 z-10 btn btn-xs bg-blue-500 text-white hover:shadow-lg' data-GPSSrc={googleMapsSrc} data-date={date} data-index={index}>
+			listOfFireworks.map(async ({ data }, index) => {
+				let displayType = (
+				<button id='show-dialog-button' class='absolute top-10 right-10 z-10 btn btn-xs bg-blue-500 text-white hover:shadow-lg' data-GPSSrc={data.googleSrc} data-date={data.date} data-index={index}>
 							See Image
 						</button>
 						<div id='index' class='absolute top-10 left-10 z-10 badge bg-gray-800 text-white opacity-50'>
 							{index + 1}
 						</div>
-						<Image src={image_data} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />
+				<CldImage src={data.public_id} height={data.height} width={data.width} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />);
+
+				if (data.resource_type === "video") {
+					displayType = <CldVideoPlayer src={data.public_id} height={data.height} width={data.width} id={`mason-image-${index}`} />
+				}
+
+				return (
+					<div id='image-container' class='relative overflow-hidden rounded-lg border border-gray-300'>
+						
+						{displayType}
 					</div>
 				);
 			})

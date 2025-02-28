@@ -1,14 +1,18 @@
 import { getImage } from "astro:assets";
 import ExifReader, { type TypedTag, type XmpTag } from "exifreader";
 import { DateTime } from "luxon";
+import bareMetadataSetup from "./bareMetadataSetup"
 
 export interface DataTypes {
 	metadata: ExifReader.Tags;
 	image_data: ImageMetadata;
 	googleMapsSrc: string;
 	date: string;
-	imageElementInput: Awaited<ReturnType<typeof getImage>>;
+	imageElementInput: Awaited<ReturnType<typeof getImage>> | null;
 }
+
+
+
 
 interface GPSStringReturnType {
 	gpsToString: string;
@@ -21,21 +25,31 @@ export async function setupExifData([path, image]: [
 	string,
 	{ default: ImageMetadata },
 ]): Promise<DataTypes> {
-	const astroImageData = await getImage({ src: image.default });
+	const isVideo = path.endsWith(".MOV");
+	if (isVideo) {
+		return {
+			metadata: {} as ExifReader.Tags,
+			image_data: image.default,
+			googleMapsSrc: "",
+			date: "",
+			imageElementInput: null,
+		};
+	}
+	const astroMediaData = await getImage({ src: image.default });
 	const newPath = path.slice(1);
+	console.log(newPath, "new path");
 	const metadata = await ExifReader.load(newPath);
-	const gpsData = metadata;
-	const area = convertGPSToString(gpsData);
-	const areaString = encodeURIComponent(area.gpsToString);
-	const src = `https://www.google.com/maps/embed/v1/place?q=${areaString}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`;
-	const photoDate = getDate(metadata);
+	const information = bareMetadataSetup({
+		gpsData: metadata,
+		metadata,
+	});
 
 	return {
 		metadata,
 		image_data: image.default,
-		googleMapsSrc: src,
-		date: photoDate.formattedDate,
-		imageElementInput: astroImageData,
+		googleMapsSrc: information.src,
+		date: information.photoDate.formattedDate,
+		imageElementInput: astroMediaData,
 	};
 }
 
