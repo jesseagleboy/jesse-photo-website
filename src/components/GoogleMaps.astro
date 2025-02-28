@@ -36,7 +36,7 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 		const infoWindow = new InfoWindow({ maxWidth: 400 });
 		markers.forEach(marker => {
 			const markerID = marker.getAttribute("data-marker-id") as string;
-			const image = images[Number(markerID)];
+			const image = (images[Number(markerID)]).cloneNode(true) as HTMLImageElement;
 			marker.addEventListener("gmp-click", () => {
 				mapElement.innerMap.panTo(marker.position);
 				if (infoWindow.isOpen) {
