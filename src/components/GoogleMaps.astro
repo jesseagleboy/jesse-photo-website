@@ -9,23 +9,56 @@ const { markerList } = Astro.props as Props;
 const latLongDecimals = markerList.map(gps => {
 	// Parse DMS coordinates
 	const position = new CoordinateParser(gps);
-	return { latitude: position.getLatitude(), longitude: position.getLongitude() };
+	return {
+		latitude: position.getLatitude(),
+		longitude: position.getLongitude(),
+	};
 });
 
-const getCenterObject = geoLib.getCenter(latLongDecimals);
+const getCenterObject = geoLib.getCenterOfBounds(latLongDecimals);
 const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.longitude}` : "0,0";
 ---
 
 <script is:inline type='module' src='https://unpkg.com/@googlemaps/extended-component-library'></script>
 <!-- Configure and load the Maps JS SDK with your API key -->
 <gmpx-api-loader key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
+<gmp-map id='google-map' slot='main' center={center} zoom='15' map-id='63bde473a221dba3'>
+	<!-- <gmp-advanced-marker position='43.880,-103.459'></gmp-advanced-marker> -->
+	{latLongDecimals.map((position, index) => <gmp-advanced-marker data-marker-id={index} class='pannable' gmp-clickable title={`${position.latitude},${position.longitude}`} position={`${position.latitude},${position.longitude}`} />)}
+</gmp-map>
+<script>
+	import { MarkerClusterer } from "@googlemaps/markerclusterer";
+	window.addEventListener("load", async () => {
+		const mapElement = document.getElementById("google-map");
+		const markers = document.querySelectorAll("gmp-advanced-marker.pannable");
+		const images = document.querySelectorAll("img") as NodeListOf<HTMLImageElement>;
+		const { InfoWindow } = await google.maps.importLibrary("maps");
+		const infoWindow = new InfoWindow({ maxWidth: 400 });
+		markers.forEach(marker => {
+			const markerID = marker.getAttribute("data-marker-id") as string;
+			const image = images[Number(markerID)];
+			marker.addEventListener("gmp-click", () => {
+				mapElement.innerMap.panTo(marker.position);
+				if (infoWindow.isOpen) {
+					infoWindow.close();
+				}
+				const headerElement = document.createElement("div");
+				headerElement.innerHTML = `<h2 class="text-2xl font-bold" style='color: black;'>${marker.title}</h2>`;
+				infoWindow.setContent(image);
+				infoWindow.setHeaderContent(headerElement);
+				infoWindow.open({
+					map: mapElement.innerMap,
+					anchor: marker,
+				});
+			});
+		});
 
-	<!-- <gmpx-place-overview slot='fixed' place='ChIJ39Y-tdg1fYcRQcZcBb499do'></gmpx-place-overview> -->
-	<gmp-map id="google-map" hidden slot='main' center={center} zoom='14' map-id='DEMO_MAP_ID'>
-		<!-- <gmp-advanced-marker position='43.880,-103.459'></gmp-advanced-marker> -->
-		{latLongDecimals.map(position => <gmp-advanced-marker position={`${position.latitude},${position.longitude}`} />)}
-	</gmp-map>
-
+		new MarkerClusterer({
+			map: mapElement.innerMap,
+			markers: markers,
+		});
+	});
+</script>
 
 <style>
 	#google-map {

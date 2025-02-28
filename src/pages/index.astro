@@ -42,7 +42,7 @@ const gpsList = listOfFireworks.map(({ data }) => data.gpsString);
 						<div id='index' class='absolute top-10 left-10 z-10 badge bg-gray-800 text-white opacity-50'>
 							{index + 1}
 						</div>
-				<CldImage src={data.public_id} height={data.height} width={data.width} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />);
+				<CldImage data-indexID={index} src={data.public_id} height={data.height} width={data.width} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />);
 
 				if (data.resource_type === "video") {
 					displayType = <CldVideoPlayer src={data.public_id} height={data.height} width={data.width} id={`mason-image-${index}`} />

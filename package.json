@@ -16,6 +16,7 @@
     "@astrojs/tailwind": "^6.0.0",
     "@googlemaps/extended-component-library": "^0.6.13",
     "@googlemaps/js-api-loader": "^1.16.8",
+    "@googlemaps/markerclusterer": "^2.5.3",
     "@tailwindcss/vite": "^4.0.9",
     "@types/luxon": "^3.4.2",
     "astro": "^5.4.0",
