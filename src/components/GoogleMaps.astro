@@ -19,7 +19,7 @@ const getCenterObject = geoLib.getCenterOfBounds(latLongDecimals);
 const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.longitude}` : "0,0";
 ---
 
-<script is:inline type='module' src='https://unpkg.com/@googlemaps/extended-component-library'></script>
+<script is:inline type='module' async defer src='https://unpkg.com/@googlemaps/extended-component-library'></script>
 <!-- Configure and load the Maps JS SDK with your API key -->
 <gmpx-api-loader key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
 <gmp-map id='google-map' slot='main' hidden center={center} zoom='15' map-id='63bde473a221dba3'>
