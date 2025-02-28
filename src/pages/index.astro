@@ -24,7 +24,7 @@ const gpsList = listOfFireworks.map(({ data }) => ({decLatitude: data.decLatitud
 const ldArray = listOfFireworks.map(({ data }) => {
 	return {
 		"@context": "https://schema.org",
-		"@type": "ImageObject",
+		"@type": ["ImageObject", "Place"],
 		"contentUrl": `https://res.cloudinary.com/dqv6g0w1a/image/upload/v169258${data.public_id}`,
 		"dateCreated": data.date,
 		"creditText": "Jesse Slomowitz",
@@ -32,7 +32,8 @@ const ldArray = listOfFireworks.map(({ data }) => {
 			"@type": "Person",
 			"name": "Jesse Slomowitz",
 		},
-		"exifData": {
+		"geo": {
+			"@type": "GeoCoordinates",
 			"latitude": data.decLatitude,
 			"longitude": data.decLongitude
 		},
