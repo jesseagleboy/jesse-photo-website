@@ -22,7 +22,7 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 <script is:inline type='module' src='https://unpkg.com/@googlemaps/extended-component-library'></script>
 <!-- Configure and load the Maps JS SDK with your API key -->
 <gmpx-api-loader key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
-<gmp-map id='google-map' slot='main' center={center} zoom='15' map-id='63bde473a221dba3'>
+<gmp-map id='google-map' slot='main' hidden center={center} zoom='15' map-id='63bde473a221dba3'>
 	<!-- <gmp-advanced-marker position='43.880,-103.459'></gmp-advanced-marker> -->
 	{latLongDecimals.map((position, index) => <gmp-advanced-marker data-marker-id={index} class='pannable' gmp-clickable title={`${position.latitude},${position.longitude}`} position={`${position.latitude},${position.longitude}`} />)}
 </gmp-map>
