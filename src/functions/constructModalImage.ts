@@ -18,10 +18,17 @@ export default function constructModalImage(
 		const getIndex = button.getAttribute("data-index") || "0";
 		const index = Number.parseInt(getIndex, 10);
 		const masonImage = document.getElementById(`mason-image-${index}`);
-
-		const getDate = button.getAttribute("data-date") || "0";
+		const getDate = button.getAttribute("data-date")?.replace(/[:]/, '-')|| "0";
 		if (dateElement) {
-			dateElement.textContent = getDate;
+			const formattedDate = new Date(getDate).toLocaleString("en-US", {
+				year: "numeric",
+				month: "long",
+				day: "numeric",
+				hour: "numeric",
+				minute: "numeric",
+				hour12: true,
+			});
+			dateElement.textContent = formattedDate;
 		}
 
 		if (modalImage && masonImage) {

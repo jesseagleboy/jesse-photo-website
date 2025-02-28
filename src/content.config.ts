@@ -13,10 +13,8 @@ function convertGPSToString(gpsString: string): string {
 
 function getGoogleEmbedURL(finalGPSString: string) {
 	const areaString = encodeURIComponent(finalGPSString);
-	const src = `https://www.google.com/maps/embed/v1/place?q=${areaString}&key=${import.meta.env.VITE_GOOGLE_MAPS_API_KEY}`;
-	const photoDate = new Date().toDateString();
-
-	return { src, photoDate };
+	const src = `https://www.google.com/maps/embed/v1/place?q=${areaString}&key=${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`;
+	return src;
 }
 
 export const collections = {
@@ -38,7 +36,7 @@ export const collections = {
 					.then((data) => {
 						const metadata = data.media_metadata;
 						const gpsString = `${convertGPSToString(metadata.GPSLatitude)} ${convertGPSToString(metadata.GPSLongitude)}`;
-						const googleSrc = getGoogleEmbedURL(gpsString).src;
+						const googleSrc = getGoogleEmbedURL(gpsString);
 						const dataSetup = {
 							date: metadata.DateTimeOriginal,
 							offsetTimeOriginal: metadata.OffsetTimeOriginal,

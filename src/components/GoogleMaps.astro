@@ -1,0 +1,34 @@
+---
+import CoordinateParser from "coordinate-parser";
+import geoLib from "geolib";
+interface Props {
+	markerList: string[];
+}
+
+const { markerList } = Astro.props as Props;
+const latLongDecimals = markerList.map(gps => {
+	// Parse DMS coordinates
+	const position = new CoordinateParser(gps);
+	return { latitude: position.getLatitude(), longitude: position.getLongitude() };
+});
+
+const getCenterObject = geoLib.getCenter(latLongDecimals);
+const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.longitude}` : "0,0";
+---
+
+<script is:inline type='module' src='https://unpkg.com/@googlemaps/extended-component-library'></script>
+<!-- Configure and load the Maps JS SDK with your API key -->
+<gmpx-api-loader key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
+
+	<!-- <gmpx-place-overview slot='fixed' place='ChIJ39Y-tdg1fYcRQcZcBb499do'></gmpx-place-overview> -->
+	<gmp-map id="google-map" hidden slot='main' center={center} zoom='14' map-id='DEMO_MAP_ID'>
+		<!-- <gmp-advanced-marker position='43.880,-103.459'></gmp-advanced-marker> -->
+		{latLongDecimals.map(position => <gmp-advanced-marker position={`${position.latitude},${position.longitude}`} />)}
+	</gmp-map>
+
+
+<style>
+	#google-map {
+		height: 600px;
+	}
+</style>
