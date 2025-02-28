@@ -1,17 +1,21 @@
 ---
 import CoordinateParser from "coordinate-parser";
 import geoLib from "geolib";
+
+interface DecaTypes {
+	decLatitude: string;
+	decLongitude: string;
+}
+
 interface Props {
-	markerList: string[];
+	markerList: DecaTypes[];
 }
 
 const { markerList } = Astro.props as Props;
 const latLongDecimals = markerList.map(gps => {
-	// Parse DMS coordinates
-	const position = new CoordinateParser(gps);
 	return {
-		latitude: position.getLatitude(),
-		longitude: position.getLongitude(),
+		latitude: gps.decLatitude,
+		longitude: gps.decLongitude,
 	};
 });
 
@@ -24,7 +28,12 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 <gmpx-api-loader key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
 <gmp-map id='google-map' slot='main' hidden center={center} zoom='15' map-id='63bde473a221dba3'>
 	<!-- <gmp-advanced-marker position='43.880,-103.459'></gmp-advanced-marker> -->
-	{latLongDecimals.map((position, index) => <gmp-advanced-marker data-marker-id={index} class='pannable' gmp-clickable title={`${position.latitude},${position.longitude}`} position={`${position.latitude},${position.longitude}`} />)}
+	{
+		latLongDecimals.map(position => {
+			const positionString = `${position.latitude},${position.longitude}`;
+			return <gmp-advanced-marker data-marker-id={positionString} class='pannable' gmp-clickable title={positionString} position={positionString} />;
+		})
+	}
 </gmp-map>
 <script>
 	import { MarkerClusterer } from "@googlemaps/markerclusterer";
@@ -35,9 +44,9 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 		const { InfoWindow } = await google.maps.importLibrary("maps");
 		const infoWindow = new InfoWindow({ maxWidth: 400 });
 		markers.forEach(marker => {
-			const markerID = marker.getAttribute("data-marker-id") as string;
-			const image = (images[Number(markerID)]).cloneNode(true) as HTMLImageElement;
 			marker.addEventListener("gmp-click", () => {
+				const markerID = marker.getAttribute("data-marker-id") as string;
+				const image = [...images].find(image => image.dataset.markerId === markerID)?.cloneNode(true) as HTMLImageElement;
 				mapElement.innerMap.panTo(marker.position);
 				if (infoWindow.isOpen) {
 					infoWindow.close();

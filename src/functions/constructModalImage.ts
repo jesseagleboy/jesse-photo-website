@@ -12,6 +12,7 @@ export default function constructModalImage(
 
 		const src = button.getAttribute("data-GPSSrc");
 		if (iframe) {
+			console.log(src, 'show src')
 			iframe.src = src || "";
 		}
 

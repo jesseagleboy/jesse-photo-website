@@ -1,5 +1,6 @@
 import { defineCollection } from "astro:content";
 import cloudinaryAPI from "cloudinary-setup";
+import CoordinateParser from "coordinate-parser"
 
 function convertGPSToString(gpsString: string): string {
 	//https://www.google.com/maps/embed/v1/place?q=28%C2%B025'6.7%22N%2081%C2%B034'52.0%22W&key=AIzaSyBtJwFFbdB9RZgA09oSq_jejVCNyXeQXYU
@@ -31,11 +32,14 @@ export const collections = {
                 if (item.resource_type === "video") {
                     return {id: item.public_id, ...item}
                 }
+				
                 const imageInformation = await cloudinaryAPI.api
 					.resource(item.public_id, { media_metadata: true })
 					.then((data) => {
 						const metadata = data.media_metadata;
+						
 						const gpsString = `${convertGPSToString(metadata.GPSLatitude)} ${convertGPSToString(metadata.GPSLongitude)}`;
+						const position = new CoordinateParser(gpsString);
 						const googleSrc = getGoogleEmbedURL(gpsString);
 						const dataSetup = {
 							date: metadata.DateTimeOriginal,
@@ -44,6 +48,8 @@ export const collections = {
 							longitude: metadata.GPSLongitude,
 							gpsString,
 							googleSrc,
+							decLatitude: position.getLatitude(),
+							decLongitude: position.getLongitude(),
 						};
 						
 
