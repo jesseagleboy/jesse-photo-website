@@ -3,13 +3,14 @@ import { Image } from "astro:assets";
 import Layout from "../layouts/Layout.astro";
 import type { ImageMetadata } from "astro";
 import { Masonry } from "astro-masonry";
-import { Schema } from "astro-seo-schema"
+import { Schema } from "astro-seo-schema";
 import ImageModal from "../components/ImageModal.astro";
 import { getCollection } from "astro:content";
 import { CldImage } from "astro-cloudinary";
 import { CldVideoPlayer } from "astro-cloudinary";
-import GoogleMaps from "@/components/GoogleMaps.astro"
+import GoogleMaps from "@/components/GoogleMaps.astro";
 import { Head } from "@zfben/astro-head";
+import type { ImageObject } from "schema-dts"
 
 // const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>("/src/assets/Disney-Fireworks/*.{JPG,jpeg,MOV}", { eager: true });
 
@@ -19,41 +20,51 @@ import { Head } from "@zfben/astro-head";
 
 const listOfFireworks = await getCollection("Disney Fireworks");
 
-const gpsList = listOfFireworks.map(({ data }) => ({decLatitude: data.decLatitude, decLongitude: data.decLongitude}));
-
-const ldArray = listOfFireworks.map(({ data }) => {
+const additionalListings: { gpsList: { decLatitude: string; decLongitude: string }; ldArray: ImageObject }[] = listOfFireworks.map(({ data }) => {
 	return {
+		gpsList: {
+			decLatitude: data.decLatitude,
+			decLongitude: data.decLongitude,
+		},
+		ldArray: {
+			"@context": "https://schema.org",
+			"@type": "ImageObject",
+			"contentUrl": `https://res.cloudinary.com/${import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${data.public_id}`,
+			"width": data.width,
+			"height": data.height,
+			"dateCreated": data.date,
+			"license": "https://creativecommons.org/licenses/by-nc/4.0/",
+			"creditText": "Jesse Slomowitz",
+			"copyrightNotice": "Jesse Slomowitz",
+			"geo": {
+				"@type": "GeoCoordinates",
+				"latitude": data.decLatitude,
+				"longitude": data.decLongitude,
+			},
+			"creator": {
+				"@type": "Person",
+				"name": "Jesse Slomowitz",
+			},
+		},
+	};
+});
+---
+
+<Layout title="Disney Fireworks by Jesse Slomowitz">
+	<Schema slot="json+ld" item={{
 		"@context": "https://schema.org",
-		"@type": ["ImageObject", "Place"],
-		"contentUrl": `https://res.cloudinary.com/dqv6g0w1a/image/upload/v169258${data.public_id}`,
-		"dateCreated": data.date,
-		"creditText": "Jesse Slomowitz",
+		"@type": "ImageGallery",
+		"image": additionalListings.map(({ ldArray }) => ldArray),
+		"dateCreated": "2018-01-01",
 		"creator": {
 			"@type": "Person",
 			"name": "Jesse Slomowitz",
 		},
-		"geo": {
-			"@type": "GeoCoordinates",
-			"latitude": data.decLatitude,
-			"longitude": data.decLongitude
-		},
-		"copyrightNotice": "Jesse Slomowitz",
-		"keywords": ["Disney", "Fireworks", "Jesse Slomowitz"],
-		"license": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
-		"thumbnailUrl": `https://res.cloudinary.com/dqv6g0w1a/image/upload/c_scale,w_200/v169258${data.public_id}`,
-		"height": data.height,
-		"width": data.width,
-		"datePublished": data.date,
-	}
-})
----
-
-<Layout>
-	<!-- <Head slot="seo" title="Disney Fireworks by Jesse Slomowitz" path={Astro.url}/> -->
-	<script is:inline type="application/ld+json" slot="seo" set:html={JSON.stringify(ldArray)} />
+		"license": "https://creativecommons.org/licenses/by-nc/4.0/",
+	}} />
 	<h3 class='text-4xl font-bold text-center'>Disney Fireworks by Jesse Slomowitz</h3>
 	<button id="toggle-map-button" class="btn btn-secondary my-2">Show Map</button>
-	<GoogleMaps markerList={gpsList}/>
+	<GoogleMaps markerList={additionalListings.map(({ gpsList }) => gpsList)}/>
 	<Masonry
 		sortByHeight={true}
 		class='custom-masonry'
