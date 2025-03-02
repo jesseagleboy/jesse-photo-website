@@ -51,7 +51,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 ---
 
 <Layout title="Disney Fireworks by Jesse Slomowitz">
-	<Schema data-partytown-exclude slot="json+ld" item={{
+	<Schema slot="json+ld" item={{
 		"@context": "https://schema.org",
 		"@type": "ImageGallery",
 		"image": additionalListings.map(({ ldArray }) => ldArray),
