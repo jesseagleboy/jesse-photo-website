@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://jesse-photo-website.netlify.app/sitemap-index.xml
+Sitemap: https://photography.jesseslomowitz.com/sitemap-index.xml
