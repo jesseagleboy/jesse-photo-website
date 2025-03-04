@@ -64,7 +64,6 @@ const ogImageURL = OGURLCreator({
 	image_url: `https://res.cloudinary.com/${import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_500/IMG_2286_lyjnmt`,
 	color_backgroundColor: "rgba(0, 0, 0, 0.8)",
 });
-console.log(ogImageURL);
 ---
 
 <Layout title="Disney Fireworks by Jesse Slomowitz">
@@ -79,7 +78,7 @@ console.log(ogImageURL);
 		},
 		"license": "https://creativecommons.org/licenses/by-nc/4.0/",
 	}} />
-	<Head slot="seo" title="Disney Fireworks by Jesse Slomowitz" description="Images of Disney Fireworks with Google Maps implementation, by Jesse Slomowitz" path={`/${Astro.url.pathname}/`} image={ogImageURL} author="Jesse Slomowitz"  />
+	<Head slot="seo" title="Disney Fireworks by Jesse Slomowitz" description="Images of Disney Fireworks with Google Maps implementation, by Jesse Slomowitz"  image={ogImageURL} author="Jesse Slomowitz"  />
 	<h1 class='text-3xl font-bold mb-4 text-center'>Disney Fireworks by Jesse Slomowitz</h1>
 	<button id="toggle-map-button" class="btn btn-secondary my-2">Show Map</button>
 	<GoogleMaps markerList={additionalListings.map(({ gpsList }) => gpsList)}/>
