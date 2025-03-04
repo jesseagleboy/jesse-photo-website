@@ -23,11 +23,10 @@ const getCenterObject = geoLib.getCenterOfBounds(latLongDecimals);
 const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.longitude}` : "0,0";
 ---
 
-<script is:inline type='module' async defer src='https://unpkg.com/@googlemaps/extended-component-library'></script>
+<script is:inline type='module' src='https://unpkg.com/@googlemaps/extended-component-library'></script>
 <!-- Configure and load the Maps JS SDK with your API key -->
-<gmpx-api-loader key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
-<gmp-map id='google-map' slot='main' hidden center={center} zoom='15' map-id='63bde473a221dba3'>
-	<!-- <gmp-advanced-marker position='43.880,-103.459'></gmp-advanced-marker> -->
+<gmpx-api-loader async defer key=`${import.meta.env.PUBLIC_GOOGLE_MAPS_API_KEY}`></gmpx-api-loader>
+<gmp-map id='google-map' async defer slot='main' center={center} zoom='15' map-id='63bde473a221dba3'>
 	{
 		latLongDecimals.map(position => {
 			const positionString = `${position.latitude},${position.longitude}`;
@@ -47,7 +46,9 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 		markers.forEach(marker => {
 			marker.addEventListener("gmp-click", () => {
 				const markerID = marker.getAttribute("data-marker-id") as string;
-				const image = Array.from(images).find(image => image.dataset.markerId === markerID)?.cloneNode(true) as HTMLImageElement;
+				const image = Array.from(images)
+					.find(image => image.dataset.markerId === markerID)
+					?.cloneNode(true) as HTMLImageElement;
 				mapElement.innerMap.panTo(marker.position);
 				if (infoWindow.isOpen) {
 					infoWindow.close();
@@ -72,6 +73,10 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 
 <style>
 	#google-map {
+		height: 0px;
+		transition: height 0.8s ease-in-out;
+	}
+	#google-map[showMap] {
 		height: 600px;
 	}
 </style>

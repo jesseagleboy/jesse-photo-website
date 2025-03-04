@@ -19,3 +19,20 @@
 		</div>
 	</div>
 </dialog>
+
+
+<style lang="scss">
+	dialog {
+		opacity: 0;
+		transition-behavior: allow-discrete;
+		transition: all 0.5s ease-in-out;
+	}
+
+	dialog[open] {
+		opacity: 1;
+	}
+
+	dialog[open]::backdrop {
+		background-color: rgba(0, 0, 0, 0.8);
+	}
+</style>

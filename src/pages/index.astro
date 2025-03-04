@@ -62,7 +62,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 		},
 		"license": "https://creativecommons.org/licenses/by-nc/4.0/",
 	}} />
-	<h3 class='text-4xl font-bold text-center'>Disney Fireworks by Jesse Slomowitz</h3>
+	<h1 class='text-3xl font-bold mb-4 text-center'>Disney Fireworks by Jesse Slomowitz</h1>
 	<button id="toggle-map-button" class="btn btn-secondary my-2">Show Map</button>
 	<GoogleMaps markerList={additionalListings.map(({ gpsList }) => gpsList)}/>
 	<Masonry
@@ -168,7 +168,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 	mapButton?.addEventListener("click", () => {
 		const map = document.querySelector("#google-map");
 		if (map) {
-			map.toggleAttribute("hidden");
+			map.toggleAttribute("showMap");
 		}
 	});
 </script>
