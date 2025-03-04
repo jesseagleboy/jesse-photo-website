@@ -13,7 +13,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-	site: "https://www.photography.jesseslomowitz.com",
+	site: "https://photography.jesseslomowitz.com",
 	server: {
 		open: true,
 	},

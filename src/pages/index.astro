@@ -54,7 +54,7 @@ function OGURLCreator({ title, description, image_url, color_backgroundColor }: 
 	const encodedImage = encodeURIComponent(image_url);
 	const encodedBackgroundColor = encodeURIComponent(color_backgroundColor);
 	
-	const string = `https://ogcdn.net/477997ff-dc72-40cc-8b94-137c11a972d2/v1/www.photography.jesseslomowitz.com/${encodedTitle}/${encodedDescription}/${encodedImage}/${encodedBackgroundColor}/og.png`
+	const string = `https://ogcdn.net/477997ff-dc72-40cc-8b94-137c11a972d2/v1/photography.jesseslomowitz.com/${encodedTitle}/${encodedDescription}/${encodedImage}/${encodedBackgroundColor}/og.png`
 	return string as `http${string}`;
 }
 
@@ -95,7 +95,7 @@ const ogImageURL = OGURLCreator({
 		{
 			listOfFireworks.map(async ({ data }, index) => {
 				const positionString = `${data.decLatitude},${data.decLongitude}`;
-				const altString = `Fireworks taken on ${new Date(data.date.replace(/:/, "-")).toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: true })} at ${positionString}`;
+				const altString = `Fireworks taken on ${new Date(data.date.replace(/(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3")).toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: true })} at ${positionString}`;
 				let displayType = (
 				<button id='show-dialog-button' class='absolute top-10 right-10 z-10 btn btn-xs bg-blue-500 text-white hover:shadow-lg' data-GPSSrc={data.googleSrc} data-date={data.date} data-index={index}>
 							See Image

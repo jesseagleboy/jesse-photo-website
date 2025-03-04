@@ -12,14 +12,16 @@ export default function constructModalImage(
 
 		const src = button.getAttribute("data-GPSSrc");
 		if (iframe) {
-			console.log(src, 'show src')
 			iframe.src = src || "";
 		}
 
 		const getIndex = button.getAttribute("data-index") || "0";
 		const index = Number.parseInt(getIndex, 10);
 		const masonImage = document.getElementById(`mason-image-${index}`);
-		const getDate = button.getAttribute("data-date")?.replace(/[:]/, '-')|| "0";
+		const getDate =
+			button
+				.getAttribute("data-date")
+				?.replace(/(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3") || "0";
 		if (dateElement) {
 			const formattedDate = new Date(getDate).toLocaleString("en-US", {
 				year: "numeric",
