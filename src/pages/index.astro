@@ -97,7 +97,7 @@ const ogImageURL = OGURLCreator({
 				const positionString = `${data.decLatitude},${data.decLongitude}`;
 				const altString = `Fireworks taken on ${new Date(data.date.replace(/(\d{4}):(\d{2}):(\d{2})/, "$1-$2-$3")).toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: true })} at ${positionString}`;
 				let displayType = (
-				<button id='show-dialog-button' class='absolute top-10 right-10 z-10 btn btn-xs bg-blue-500 text-white hover:shadow-lg' data-GPSSrc={data.googleSrc} data-date={data.date} data-index={index}>
+				<button id={`show-dialog-button-${index}`} class='show-dialog-button absolute top-10 right-10 z-10 btn btn-xs bg-blue-500 text-white hover:shadow-lg' data-GPSSrc={data.googleSrc} data-date={data.date} data-index={index}>
 							See Image
 						</button>
 						<div id='index' class='absolute top-10 left-10 z-10 badge bg-gray-800 text-white opacity-50'>
@@ -128,7 +128,7 @@ const ogImageURL = OGURLCreator({
 		z-index: 2;
 	}
 
-	#show-dialog-button {
+	.show-dialog-button {
 		position: absolute;
 		top: 1%;
 		right: 1%;
@@ -172,7 +172,7 @@ const ogImageURL = OGURLCreator({
 	import constructModalImage from "@/functions/constructModalImage";
 
 	const dialog = document.querySelector<HTMLDialogElement>("dialog");
-	const showDialogButton = document.querySelectorAll<HTMLButtonElement>("#show-dialog-button");
+	const showDialogButton = document.querySelectorAll<HTMLButtonElement>(".show-dialog-button");
 	const iframe = dialog?.querySelector("iframe");
 	const date = dialog?.querySelector<HTMLDivElement>("#date");
 
