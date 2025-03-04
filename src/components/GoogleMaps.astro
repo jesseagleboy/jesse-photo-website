@@ -43,10 +43,11 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 		const images = document.querySelectorAll("img") as NodeListOf<HTMLImageElement>;
 		const { InfoWindow } = await google.maps.importLibrary("maps");
 		const infoWindow = new InfoWindow({ maxWidth: 400 });
+
 		markers.forEach(marker => {
 			marker.addEventListener("gmp-click", () => {
 				const markerID = marker.getAttribute("data-marker-id") as string;
-				const image = [...images].find(image => image.dataset.markerId === markerID)?.cloneNode(true) as HTMLImageElement;
+				const image = Array.from(images).find(image => image.dataset.markerId === markerID)?.cloneNode(true) as HTMLImageElement;
 				mapElement.innerMap.panTo(marker.position);
 				if (infoWindow.isOpen) {
 					infoWindow.close();
@@ -64,7 +65,7 @@ const center = getCenterObject ? `${getCenterObject.latitude},${getCenterObject.
 
 		new MarkerClusterer({
 			map: mapElement.innerMap,
-			markers: markers,
+			markers: markers as unknown as google.maps.Marker[],
 		});
 	});
 </script>

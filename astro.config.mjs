@@ -13,34 +13,34 @@ import tailwindcss from "@tailwindcss/vite";
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://www.photography.jesseslomowitz.com/",
+	site: "https://www.photography.jesseslomowitz.com/",
 
-  server: {
-      open: true,
+	server: {
+		open: true,
 	},
 
-  image: {
-      experimentalLayout: "responsive",
+	image: {
+		experimentalLayout: "responsive",
 	},
 
-  experimental: {
-      responsiveImages: true,
-      svg: true,
+	experimental: {
+		responsiveImages: true,
+		svg: true,
 	},
 
-  integrations: [
-      sitemap(),
-      partytown({
-          config: {
-              forward: ["dataLayer.push"],
-          },
-      }),
-      svelte(),
-      robots(),
+	integrations: [
+		sitemap(),
+		partytown({
+			config: {
+				forward: ["dataLayer.push"],
+			},
+		}),
+		svelte(),
+		robots(),
 	],
 
-  vite: {
-    plugins: [tailwindcss()],
-    assetsInclude: ['**/*.MOV', '**/*.mov'],
-  },
+	vite: {
+		plugins: [tailwindcss()],
+		assetsInclude: ["**/*.MOV", "**/*.mov"],
+	},
 });

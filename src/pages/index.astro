@@ -10,7 +10,7 @@ import { CldImage } from "astro-cloudinary";
 import { CldVideoPlayer } from "astro-cloudinary";
 import GoogleMaps from "@/components/GoogleMaps.astro";
 import { Head } from "@zfben/astro-head";
-import type { ImageObject } from "schema-dts"
+import type { ImageObject, PlaceObject } from "schema-dts"
 
 // const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>("/src/assets/Disney-Fireworks/*.{JPG,jpeg,MOV}", { eager: true });
 
@@ -20,7 +20,7 @@ import type { ImageObject } from "schema-dts"
 
 const listOfFireworks = await getCollection("Disney Fireworks");
 
-const additionalListings: { gpsList: { decLatitude: string; decLongitude: string }; ldArray: ImageObject }[] = listOfFireworks.map(({ data }) => {
+const additionalListings: { gpsList: { decLatitude: string; decLongitude: string }; ldArray: any }[] = listOfFireworks.map(({ data }) => {
 	return {
 		gpsList: {
 			decLatitude: data.decLatitude,
@@ -28,7 +28,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 		},
 		ldArray: {
 			"@context": "https://schema.org",
-			"@type": "ImageObject",
+			"@type": ["ImageObject", "Place"],
 			"contentUrl": `https://res.cloudinary.com/${import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${data.public_id}`,
 			"width": data.width,
 			"height": data.height,
@@ -78,6 +78,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 		{
 			listOfFireworks.map(async ({ data }, index) => {
 				const positionString = `${data.decLatitude},${data.decLongitude}`;
+				const altString = `Fireworks taken on ${new Date(data.date.replace(/:/, "-")).toLocaleString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "numeric", hour12: true })} at ${positionString}`;
 				let displayType = (
 				<button id='show-dialog-button' class='absolute top-10 right-10 z-10 btn btn-xs bg-blue-500 text-white hover:shadow-lg' data-GPSSrc={data.googleSrc} data-date={data.date} data-index={index}>
 							See Image
@@ -85,7 +86,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 						<div id='index' class='absolute top-10 left-10 z-10 badge bg-gray-800 text-white opacity-50'>
 							{index + 1}
 						</div>
-				<CldImage data-marker-id={positionString} src={data.public_id} height={data.height} width={data.width} alt='Fireworks' id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />);
+				<CldImage data-marker-id={positionString} src={data.public_id} height={data.height} width={data.width} title={altString} alt={altString} id={`mason-image-${index}`} class='transition-transform duration-500 hover:scale-110' />);
 
 				if (data.resource_type === "video") {
 					displayType = <CldVideoPlayer src={data.public_id} height={data.height} width={data.width} id={`mason-image-${index}`} />

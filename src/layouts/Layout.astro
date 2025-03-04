@@ -14,7 +14,7 @@ const { title = "Disney Fireworks by Jesse Slomowitz" } = Astro.props;
 	<head>
 		<meta charset='UTF-8' />
 		<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-		<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+		<link rel='icon' type='image/png' href='/favicon.png' />
 		<link rel='sitemap' href='/sitemap-index.xml' />
 		<meta name='generator' content={Astro.generator} />
 		<title>{title}</title>
@@ -22,6 +22,9 @@ const { title = "Disney Fireworks by Jesse Slomowitz" } = Astro.props;
 		<link rel='preconnect' href='https://res.cloudinary.com' />
 		<link rel='preconnect' href='https://maps.googleapis.com' />
 		<slot name='json+ld' />
+		<meta name='description' content='Images of Disney Fireworks with Google Maps implementation, by Jesse Slomowitz' />
+		<meta name='author' content='Jesse Slomowitz' />
+		<meta name='copyright' content='Jesse Slomowitz' />
 	</head>
 	<body class='p-5'>
 		<slot />
