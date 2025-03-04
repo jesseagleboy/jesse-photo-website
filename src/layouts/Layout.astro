@@ -22,8 +22,7 @@ const { title = "Disney Fireworks by Jesse Slomowitz" } = Astro.props;
 		<link rel='preconnect' href='https://res.cloudinary.com' />
 		<link rel='preconnect' href='https://maps.googleapis.com' />
 		<slot name='json+ld' />
-		<meta name='description' content='Images of Disney Fireworks with Google Maps implementation, by Jesse Slomowitz' />
-		<meta name='author' content='Jesse Slomowitz' />
+		<slot name="seo" />
 		<meta name='copyright' content='Jesse Slomowitz' />
 	</head>
 	<body class='p-5'>

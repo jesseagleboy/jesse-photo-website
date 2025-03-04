@@ -10,7 +10,6 @@ import { CldImage } from "astro-cloudinary";
 import { CldVideoPlayer } from "astro-cloudinary";
 import GoogleMaps from "@/components/GoogleMaps.astro";
 import { Head } from "@zfben/astro-head";
-import type { ImageObject, PlaceObject } from "schema-dts"
 
 // const listOfFireworks = import.meta.glob<{ default: ImageMetadata }>("/src/assets/Disney-Fireworks/*.{JPG,jpeg,MOV}", { eager: true });
 
@@ -48,6 +47,24 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 		},
 	};
 });
+
+function OGURLCreator({ title, description, image_url, color_backgroundColor }: { title: string; description: string; image_url: string; color_backgroundColor: string }): `http${string}` {
+	const encodedTitle = encodeURIComponent(title);
+	const encodedDescription = encodeURIComponent(description);
+	const encodedImage = encodeURIComponent(image_url);
+	const encodedBackgroundColor = encodeURIComponent(color_backgroundColor);
+	
+	const string = `https://ogcdn.net/477997ff-dc72-40cc-8b94-137c11a972d2/v1/www.photography.jesseslomowitz.com/${encodedTitle}/${encodedDescription}/${encodedImage}/${encodedBackgroundColor}/og.png`
+	return string as `http${string}`;
+}
+
+const ogImageURL = OGURLCreator({
+	title: "Disney Fireworks by Jesse Slomowitz",
+	description: "This is an image gallery of Disney Fireworks, taken by Jesse Slomowitz. Google Maps is implemented to show the location of each image.",
+	image_url: `https://res.cloudinary.com/${import.meta.env.PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/w_500/IMG_2286_lyjnmt`,
+	color_backgroundColor: "rgba(0, 0, 0, 0.8)",
+});
+console.log(ogImageURL);
 ---
 
 <Layout title="Disney Fireworks by Jesse Slomowitz">
@@ -62,6 +79,7 @@ const additionalListings: { gpsList: { decLatitude: string; decLongitude: string
 		},
 		"license": "https://creativecommons.org/licenses/by-nc/4.0/",
 	}} />
+	<Head slot="seo" title="Disney Fireworks by Jesse Slomowitz" description="Images of Disney Fireworks with Google Maps implementation, by Jesse Slomowitz" path={`/${Astro.url.pathname}/`} image={ogImageURL} author="Jesse Slomowitz"  />
 	<h1 class='text-3xl font-bold mb-4 text-center'>Disney Fireworks by Jesse Slomowitz</h1>
 	<button id="toggle-map-button" class="btn btn-secondary my-2">Show Map</button>
 	<GoogleMaps markerList={additionalListings.map(({ gpsList }) => gpsList)}/>
