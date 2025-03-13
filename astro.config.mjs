@@ -40,6 +40,5 @@ export default defineConfig({
 
 	vite: {
 		plugins: [tailwindcss()],
-		assetsInclude: ["**/*.MOV", "**/*.mov"],
 	},
 });
